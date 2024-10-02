@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'tenants.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django_tenants.postgresql_backend',
-        'NAME': 'tenantsTest',
-        'USER':'postgres',
-        'PASSWORD':'Lastarrow',
-        'HOST':'localhost',
-        'PORT':5432,
+        'NAME': 'postgres',
+        'USER':'postgres.ingyyiboqncvvsiwwarp',
+        'PASSWORD':'iQ!BA5KnH!t2Z4q',
+        'HOST':'aws-0-us-east-1.pooler.supabase.com',
+        'PORT':6543,
     }
 }
 
@@ -145,3 +145,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TENANT_MODEL = "core.Client"
 
 TENANT_DOMAIN_MODEL = "core.ClientDomain"
+
+
+PUBLIC_SCHEMA_URLCONF = "core.urls"

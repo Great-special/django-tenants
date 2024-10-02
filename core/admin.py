@@ -8,6 +8,7 @@ from .models import Client, ClientDomain
 @admin.register(Client)
 class ClientAdmin(TenantAdminMixin, admin.ModelAdmin):
     list_display = ('name',)
+    prepopulated_fields = {'schema_name':('name',)}
     
     
 admin.site.register(ClientDomain)
