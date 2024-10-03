@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 SHARED_APPS = [
     'django_tenants',
+    'django_hosts',
     'core',
     'accounts',
     'django.contrib.admin',
@@ -50,7 +51,8 @@ TENANT_APPS = [
 INSTALLED_APPS = SHARED_APPS + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 MIDDLEWARE = [
-    'django_tenants.middleware.main.TenantMainMiddleware',
+    'tenants.middleware.CustomTenantMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -58,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware',
 ]
 
 ROOT_URLCONF = 'tenants.urls'
@@ -65,7 +68,7 @@ ROOT_URLCONF = 'tenants.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'tenants.context_processor.tenant_context',
             ],
         },
     },
@@ -146,5 +150,9 @@ TENANT_MODEL = "core.Client"
 
 TENANT_DOMAIN_MODEL = "core.ClientDomain"
 
-
 PUBLIC_SCHEMA_URLCONF = "core.urls"
+
+# Django Hosts settings
+DEFAULT_HOST = 'www'
+ROOT_HOSTCONF = 'tenants.hosts'
+PARENT_HOST = 'localhost'

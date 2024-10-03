@@ -1,0 +1,84 @@
+{% load static %}
+{% load hosts %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ request.tenant.name|default:"Our Site" }}{% endblock %}</title>
+    <style>
+        .nav-bar {
+            background-color: #333;
+            padding: 10px 0;
+        }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        .nav-links a:hover {
+            background-color: #555;
+        }
+        .current-tenant {
+            margin: 10px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar">
+        <div class="nav-links">
+            {# Main site link #}
+            <a href="{% host_url 'home' host 'www' %}">Main Site</a>
+
+            {# Non-tenant subdomain links #}
+            <a href="{% host_url 'accounts_home' host 'accounts' %}">Accounts</a>
+            <a href="{% host_url 'blog_home' host 'blog' %}">Blog</a>
+
+            {# Tenant-specific links #}
+            {% if request.tenant.schema_name != 'public' %}
+                <a href="{% host_url 'tenant_dashboard' host 'tenant' %}">Tenant Dashboard</a>
+                <a href="{% host_url 'tenant_settings' host 'tenant' %}">Tenant Settings</a>
+            {% endif %}
+
+            {# Dynamic tenant switcher #}
+            {% if user.is_authenticated and user.is_staff %}
+                <div class="tenant-switcher">
+                    <select onchange="switchTenant(this.value)">
+                        <option value="">Switch Tenant</option>
+                        {% for tenant in available_tenants %}
+                            <option value="{{ tenant.domain_url }}">{{ tenant.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="current-tenant">
+        {% if request.tenant.schema_name != 'public' %}
+            Current Tenant: {{ request.tenant.name }}
+        {% endif %}
+    </div>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script>
+        function switchTenant(url) {
+            if (url) {
+                window.location.href = '//' + url;
+            }
+        }
+    </script>
+</body>
+</html>
