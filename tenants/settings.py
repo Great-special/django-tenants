@@ -155,4 +155,4 @@ PUBLIC_SCHEMA_URLCONF = "core.urls"
 # Django Hosts settings
 DEFAULT_HOST = 'www'
 ROOT_HOSTCONF = 'tenants.hosts'
-PARENT_HOST = 'localhost'
+PARENT_HOST = 'localhost:8000'
